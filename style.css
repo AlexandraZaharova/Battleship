@@ -1,0 +1,51 @@
+html, body, h1, p {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  width: 959px;
+  margin: 15vh auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: url('img/grid.png');
+}
+
+.field-wrapper {
+  width: calc(100% - 69px);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  margin-left: 35px;
+  margin-right: 35px;
+}
+.number {
+  margin-left: 43px;
+  color: #37259d;
+  font-size: 29px;
+  font-weight: bold;
+  letter-spacing: 18px;
+}
+
+.number > span {
+  letter-spacing: -1px;
+}
+
+.column {
+  display: flex;
+}
+
+.letter {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  color: #37259d;
+  font-size: 27px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.field {
+  width: 325px;
+  height: 325px;
+  border: 3px solid #37259d;
+}
