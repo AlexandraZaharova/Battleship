@@ -15,6 +15,14 @@ const getCoordinates = el => {
     bottom: coords.bottom
   };
 };
+// родительский контейнер с инструкцией
+const instruction = document.querySelector('.instruction');
+// контейнер, в котором будут размещаться корабли, предназначенные для перетаскивания
+// на игровое поле
+const shipsCollection = document.querySelector('.ships-collection');
+// контейнер с набором кораблей, предназначенных для перетаскивания
+// на игровое поле
+const initialShips = document.querySelector('.initial-ships');
 
 class Field {
   // размер стороны игрового поля в px
@@ -46,6 +54,11 @@ class Field {
     this.fieldRight = right;
     this.fieldTop = top;
     this.fieldBottom = bottom;
-    console.log(left);
   }
 }
+
+// получаем экземпляр игрового поля игрока
+const human = new Field(humanfield);
+
+// экземпляр игрового поля компьютера только регистрируем
+let computer = {};

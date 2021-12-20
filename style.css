@@ -1,6 +1,7 @@
-html, body, h1, p {
+html, body, h1, p, ul, li {
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 .container {
   width: 959px;
@@ -58,4 +59,67 @@ html, body, h1, p {
   font-size: 21px;
   margin-top: 7px;
   cursor: pointer;
+}
+
+.initial-ships li {
+  height: 35px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 31px;
+}
+
+.ship, .icon-field, .btn-play {
+  background: url('img/sprite.png') no-repeat;
+}
+
+.ship {
+  height: 35px;
+  position: absolute;
+}
+
+.fourdeck {
+  width: 134px;
+  background-position: 0 0;
+}
+
+.tripledeck {
+  width: 101px;
+  background-position: -150px 0;
+}
+
+.doubledeck {
+  width: 68px;
+  background-position: -270px 0;
+}
+
+.singledeck {
+  width: 35px;
+  background-position: -360px 0;
+}
+.initial-ships .ship {
+  left: 0;
+  top: 0;
+  float: left;
+  cursor: move;
+}
+.initial-ships .tripledeck1 {
+  left: 164px;
+}
+.initial-ships .tripledeck2 {
+  left: 297px;
+}
+.initial-ships .doubledeck2 {
+  left: 99px;
+}
+.initial-ships .doubledeck3 {
+  left: 197px;
+}
+.initial-ships .singledeck2 {
+  left: 65px;
+}
+.initial-ships .singledeck3 {
+  left: 131px;
+}
+.initial-ships .singledeck4 {
+  left: 197px;
 }
