@@ -49,3 +49,13 @@ html, body, h1, p {
   height: 325px;
   border: 3px solid #37259d;
 }
+
+.instruction {
+  width: 425px;
+}
+
+.instruction p {
+  font-size: 21px;
+  margin-top: 7px;
+  cursor: pointer;
+}

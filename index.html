@@ -9,22 +9,31 @@
 <div class="container">
   <h1>Морской бой</h1>
   <div class="field-wrapper">
-    <div class="field-human">
+    <div class="human-area">
       <p class="number">123456789<span>10</span></p>
       <div class="column">
         <p class="letter">АБВГДЕЖЗИК</p>
-        <div class="field"></div>
+        <div id="field_human" class="field"></div>
       </div>
     </div>
-    <div class="field-human">
+    <div class="computer-area">
       <p class="number">123456789<span>10</span></p>
       <div class="column">
         <p class="letter">АБВГДЕЖЗИК</p>
-        <div class="field"></div>
+        <div id="field_computer" class="field"></div>
       </div>
     </div>
+    <!-- instruction -->
+    <div class="instruction">
+      <div class="choice-of-arrangement">
+        <p>1. Случайным образом</p>
+        <p>2. Методом перетаскивания</p>
+      </div>
+    </div>
+    <!-- /instruction -->
   </div>
   <div class="information"></div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>
