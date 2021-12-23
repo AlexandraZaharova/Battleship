@@ -26,16 +26,20 @@
     <!-- instruction -->
     <div class="instruction">
       <div class="choice-of-arrangement">
-        <p>1. Случайным образом</p>
-        <p>2. Методом перетаскивания</p>
+        <p data-choise="random">1. Случайным образом</p>
+        <p data-choise="manually">2. Методом перетаскивания</p>
       </div>
-      <div class="ships-collection">
+      <div class="ships-collection" hidden>
         <p>Перетащите мышкой корабли на игровое поле. Для установки корабля по вертикали, кликните по нему правой кнопкой мышки.</p>
       </div>
     </div>
     <!-- /instruction -->
   </div>
-  <div class="information"></div>
+  <div class="information">
+    <p id="service_text" class="service-text"></p>
+    <button id="play" type="button" class="btn-play" hidden>Играть</button>
+    <button id="newgame" type="button" class="btn-play btn-newgame" hidden>Продолжить</button>
+  </div>
 </div>
 <ul class="initial-ships" hidden>
   <li>
