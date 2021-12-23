@@ -1,5 +1,14 @@
 ;(function () {
   'use strict';
+  // флаг начала игры, устанавливается после нажатия кнопки 'Play'
+  let startGame = false;
+  // флаг установки обработчиков событий ручного размещения кораблей и
+  // редактирование их положения
+  let isHandlerPlacement = false;
+  // флаг установки обработчиков событий ведения морского боя
+  let isHandlerController = false;
+  // флаг, блокирующий действия игрока во время выстрела компьютера
+  let compShot = false;
   const computerArea = document.querySelector('.computer-area');
   computerArea.hidden = true;
 
@@ -48,7 +57,6 @@
       this.fieldRight = right;
       this.fieldTop = top;
       this.fieldBottom = bottom;
-      console.log(this.fieldLeft);
     }
 
     static createMatrix() {
@@ -66,7 +74,6 @@
       this.squadron = {};
       // заполняем матрицу игрового поля нулями
       this.matrix = Field.createMatrix();
-      console.log(this.matrix)
     }
 
     randomLocationShips() {
@@ -235,6 +242,72 @@
     }
   }
 
+  class Controller {
+    // массив базовых координат для формирования coordsFixedHit
+    static START_POINTS = [
+      [ [6,0], [2,0], [0,2], [0,6] ],
+      [ [3,0], [7,0], [9,2], [9,6] ]
+    ];
+    // Блок, в который выводятся информационные сообщения по ходу игры
+    static SERVICE_TEXT = document.getElementById('service_text');
+
+    constructor() {
+      this.player = '';
+      this.opponent = '';
+      this.text = '';
+      // массив с координатами выстрелов при рандомном выборе
+      this.coordsRandomHit = [];
+      // массив с заранее вычисленными координатами выстрелов
+      this.coordsFixedHit = [];
+      // массив с координатами вокруг клетки с попаданием
+      this.coordsAroundHit = [];
+      // временный объект корабля, куда будем заносить координаты
+      // попаданий, расположение корабля, количество попаданий
+      // this.resetTempShip();
+    }
+
+    // вывод информационных сообщений
+    static showServiceText = text => {
+      Controller.SERVICE_TEXT.innerHTML = text;
+    }
+
+    // преобразование абсолютных координат иконок в координаты матрицы
+    static getCoordsIcon = el => {
+      const x = el.style.top.slice(0, -2) / Field.SHIP_SIDE;
+      const y = el.style.left.slice(0, -2) / Field.SHIP_SIDE;
+      return [x, y];
+    }
+
+    // удаление ненужных координат из массива
+    static removeElementArray = (arr, [x, y]) => {
+      return arr.filter(item => item[0] !== x || item[1] !== y);
+    }
+
+    init() {
+      // Рандомно выбираем игрока и его противника
+      const random = Field.getRandom(1);
+      this.player = (random === 0) ? human : computer;
+      this.opponent = (this.player === human) ? computer : human;
+
+      // обработчики события для игрока
+      // if (!isHandlerController) {
+      //   //выстрел игрока
+      //   computerfield.addEventListener('click', this.makeShot.bind(this));
+      //   // устанавливаем маркер на заведомо пустую клетку
+      //   computerfield.addEventListener('contextmenu', this.setUselessCell.bind(this));
+      //   isHandlerController = true;
+      // }
+
+      if (this.player === human) {
+        compShot = false;
+        this.text = 'Вы стреляете первым';
+      } else {
+        this.text = 'Компьютер стрелят первым';
+      }
+      Controller.showServiceText(this.text);
+    }
+  }
+
 // получаем экземпляр игрового поля игрока
   const human = new Field(humanfield);
 // экземпляр игрового поля компьютера только регистрируем
@@ -250,6 +323,8 @@
   const buttonPlay = document.getElementById('play');
 // кнопка перезапуска игры
   const buttonNewGame = document.getElementById('newgame');
+
+  let control = null;
 
   document.querySelector('.choice-of-arrangement').addEventListener('click', function (e) {
     if (e.target.tagName !== 'P') return;
@@ -270,7 +345,6 @@
         // shipsCollection.hidden = true;
         // вызов ф-ии рандомно расставляющей корабли для экземпляра игрока
         human.randomLocationShips();
-        console.log(11)
       },
       // manually() {
       //   // этот код мы рассмотрим, когда будем реализовывать
@@ -282,4 +356,27 @@
     // от способа расстановки кораблей
     typeGeneration[type]();
   })
+
+  //начало игры
+  buttonPlay.addEventListener('click', function(e) {
+    // скрываем не нужные для игры элементы
+    buttonPlay.hidden = true;
+    instruction.hidden = true;
+    // показываем игровое поле компьютера
+    computerArea.hidden = false;
+    // toptext.innerHTML = 'Морской бой между эскадрами';
+
+    // создаём экземпляр игрового поля компьютера
+    computer = new Field(computerfield);
+    // очищаем поле от ранее установленных кораблей
+    computer.cleanField();
+    computer.randomLocationShips();
+    // устанавливаем флаг запуска игры
+    startGame = true;
+
+    // создаём экземпляр контроллера, управляющего игрой
+    if (!control) control = new Controller();
+    // запускаем игру
+    control.init();
+  });
 })();

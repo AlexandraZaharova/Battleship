@@ -14,7 +14,7 @@ html, body, h1, p, ul, li {
 }
 
 .field-wrapper {
-  width: calc(100% - 69px);
+  width: calc(100% - 68px);
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
@@ -134,14 +134,18 @@ html, body, h1, p, ul, li {
 }
 
 .information {
-  margin-top: 61px;
+  margin-top: 39px;
 }
 
 .btn-play {
-  background: white;
   height: 45px;
   width: 123px;
+  background: white;
   border: 3px solid #37259d;
   color: #37259d;
   font-size: 25px;
+}
+
+.service-text {
+  font-size: 21px;
 }
