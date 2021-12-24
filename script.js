@@ -290,13 +290,13 @@
       this.opponent = (this.player === human) ? computer : human;
 
       // обработчики события для игрока
-      // if (!isHandlerController) {
-      //   //выстрел игрока
-      //   computerfield.addEventListener('click', this.makeShot.bind(this));
-      //   // устанавливаем маркер на заведомо пустую клетку
-      //   computerfield.addEventListener('contextmenu', this.setUselessCell.bind(this));
-      //   isHandlerController = true;
-      // }
+      if (!isHandlerController) {
+        //выстрел игрока
+        computerfield.addEventListener('click', this.makeShot.bind(this));
+        // устанавливаем маркер на заведомо пустую клетку
+        // computerfield.addEventListener('contextmenu', this.setUselessCell.bind(this));
+        isHandlerController = true;
+      }
 
       if (this.player === human) {
         compShot = false;
@@ -306,6 +306,141 @@
       }
       Controller.showServiceText(this.text);
     }
+
+    transformCoordsInMatrix(e, self) {
+      const x = Math.trunc((e.pageY - self.fieldTop) / Field.SHIP_SIDE);
+      const y = Math.trunc((e.pageX - self.fieldLeft) / Field.SHIP_SIDE);
+      return [x, y];
+    }
+
+    showIcons(opponent, [x, y], iconClass) {
+      // экземпляр игрового поля на котором будет размещена иконка
+      const field = opponent.field;
+      // небольшая задержка при формировании иконок промаха и попадания
+      if (iconClass === 'dot' || iconClass === 'red-cross') {
+        setTimeout(() => fn(), 400);
+      } else {
+        fn();
+      }
+      function fn() {
+        // создание элемента и добавление ему класса и стилей
+        const span = document.createElement('span');
+        span.className = `icon-field ${iconClass}`;
+        span.style.cssText = `left:${y * Field.SHIP_SIDE + 7}px; top:${x * Field.SHIP_SIDE + 2}px;`;
+        if (iconClass === 'dot') {
+          span.innerHTML = '&#10041;';
+        } else {
+          span.innerHTML = '&#10008;';
+        }
+        // размещаем иконку на игровом поле
+        field.appendChild(span);
+      }
+    }
+
+    showExplosion(x, y) {
+      this.showIcons(this.opponent, [x, y], 'explosion');
+      const explosion = this.opponent.field.querySelector('.explosion');
+      explosion.classList.add('active');
+      setTimeout(() => explosion.remove(), 430);
+    }
+
+    makeShot(e) {
+      let x, y;
+      if (e !== undefined) {
+        if (e.which !== 1 || compShot) return;
+        ([x, y] = this.transformCoordsInMatrix(e, this.opponent));
+
+        // проверяем наличие иконки 'shaded-cell' по полученым координатам
+        // const check = this.checkUselessCell([x, y]);
+        // if (!check) return;
+      } else {
+        // получаем координаты для выстрела компьютера
+        ([x, y] = this.getCoordsForShot());
+      }
+
+      // показываем и удаляем иконку выстрела
+      this.showExplosion(x, y);
+      const v	= this.opponent.matrix[x][y];
+      switch(v) {
+        case 0: // промах
+          this.miss(x, y);
+          break;
+        case 1: // попадание
+          this.hit(x, y);
+          break;
+        case 3: // повторный обстрел
+        case 4:
+          Controller.showServiceText('По этим координатам вы уже стреляли!');
+          break;
+      }
+    }
+
+    miss(x, y) {
+      let text = '';
+      // устанавливаем иконку промаха и записываем промах в матрицу
+      this.showIcons(this.opponent, [x, y], 'dot');
+      this.opponent.matrix[x][y] = 3;
+
+      // определяем статус игроков
+      if (this.player === human) {
+        text = 'Вы промахнулись. Стреляет компьютер.';
+        this.player = computer;
+        this.opponent = human;
+        compShot = true;
+        setTimeout(() => this.makeShot(), 2000);
+      } else {
+        text = 'Компьютер промахнулся. Ваш выстрел.';
+        this.player = human;
+        this.opponent = computer;
+        compShot = false;
+      }
+      setTimeout(() => Controller.showServiceText(text), 400);
+    }
+
+    hit(x, y) {
+      let text = '';
+      // устанавливаем иконку попадания и записываем попадание в матрицу
+      this.showIcons(this.opponent, [x, y], 'red-cross');
+      this.opponent.matrix[x][y] = 4;
+      // выводим текст, зависящий от стреляющего
+      text = (this.player === human) ? 'Поздравляем! Вы попали. Ваш выстрел.' : 'Компьютер попал в ваш корабль. Выстрел компьютера';
+      setTimeout(() => Controller.showServiceText(text), 400);
+
+      // перебираем корабли эскадры противника
+      outerloop:
+        for (let name in this.opponent.squadron) {
+          const dataShip = this.opponent.squadron[name];
+          for (let value of dataShip.arrDecks) {
+            // перебираем координаты палуб и сравниваем с координатами попадания
+            // если координаты не совпадают, переходим к следующей итерации
+            if (value[0] !== x || value[1] !== y) continue;
+            dataShip.hits++;
+            if (dataShip.hits < dataShip.arrDecks.length) break outerloop;
+            // код, относящийся к выстрелу компьютера, будет дополнен
+            if (this.opponent === human) {
+              console.log('Код находится в разработке');
+            }
+            // если количество попаданий в корабль равно количеству палуб,
+            // удаляем данный корабль из массива эскадры
+            delete this.opponent.squadron[name];
+            break outerloop;
+          }
+        }
+
+      // все корабли эскадры уничтожены
+      if (Object.keys(this.opponent.squadron).length === 0) {
+        // код, относящийся к выстрелу компьютера, будет рассмотрен позже
+        if (this.opponent === human) {
+          console.log('Код находится в разработке');
+        } else {
+          text = 'Поздравляем! Вы выиграли!';
+        }
+        Controller.showServiceText(text);
+        // показываем кнопку продолжения игры
+        buttonNewGame.hidden = false;
+      }
+    }
+
   }
 
 // получаем экземпляр игрового поля игрока

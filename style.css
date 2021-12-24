@@ -68,8 +68,8 @@ h1 {
 }
 
 .instruction p {
-  font-size: 21px;
-  margin-top: 7px;
+  font-size: 23px;
+  margin-top: 5px;
   cursor: pointer;
 }
 
@@ -158,4 +158,16 @@ h1 {
 
 .service-text {
   font-size: 23px;
+}
+
+.icon-field {
+  width: 33px;
+  height: 33px;
+  display: block;
+  position: absolute;
+  z-index: 5;
+}
+
+.red-cross {
+  color: red;
 }
