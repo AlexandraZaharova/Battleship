@@ -2,9 +2,10 @@ html, body, h1, p, ul, li {
   margin: 0;
   padding: 0;
   list-style-type: none;
+  font-family: 'Caveat', cursive;
 }
 .container {
-  width: 959px;
+  max-width: 959px;
   height: 700px;
   margin: 15vh auto 0;
   display: flex;
@@ -17,16 +18,23 @@ html, body, h1, p, ul, li {
   width: calc(100% - 68px);
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 22px;
   margin-left: 35px;
   margin-right: 35px;
 }
+
+h1 {
+  margin-top: 25px;
+  font-size: 39px;
+  font-weight: 600;
+}
+
 .number {
   margin-left: 43px;
   color: #37259d;
   font-size: 29px;
   font-weight: bold;
-  letter-spacing: 18px;
+  letter-spacing: 19px;
 }
 
 .number > span {
@@ -43,9 +51,8 @@ html, body, h1, p, ul, li {
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: #37259d;
-  font-size: 27px;
+  font-size: 26px;
   font-weight: bold;
-  letter-spacing: 3px;
 }
 
 .field {
@@ -61,8 +68,8 @@ html, body, h1, p, ul, li {
 }
 
 .instruction p {
-  font-size: 21px;
-  margin-top: 7px;
+  font-size: 23px;
+  margin-top: 5px;
   cursor: pointer;
 }
 
@@ -140,12 +147,27 @@ html, body, h1, p, ul, li {
 .btn-play {
   height: 45px;
   width: 123px;
+  margin-top: 5px;
   background: white;
   border: 3px solid #37259d;
   color: #37259d;
+  font-family: 'Caveat', cursive;
   font-size: 25px;
+  cursor: pointer;
 }
 
 .service-text {
-  font-size: 21px;
+  font-size: 23px;
+}
+
+.icon-field {
+  width: 33px;
+  height: 33px;
+  display: block;
+  position: absolute;
+  z-index: 5;
+}
+
+.red-cross {
+  color: red;
 }
